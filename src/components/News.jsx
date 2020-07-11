@@ -50,8 +50,11 @@ class News extends Component {
         fetch(url)
             .then(response => {
                 return response.json().then(data => {
-                    console.log(data)
-                    this.setState({articleList: data.articles,error: false})
+                    if(data.status==='error'){
+                        this.setState({error: true})
+                    }else {
+                        this.setState({articleList: data.articles, error: false})
+                    }
                 })
             })
             .catch(error => {
@@ -71,7 +74,7 @@ class News extends Component {
             if (this.state.loading) {
                 return <Loader/>
             } else {
-                if (this.state.articleList.length === 0) {
+                if (this.state.articleList.length===0) {
                         return <NoResult/>
                 } else {
                     return (
