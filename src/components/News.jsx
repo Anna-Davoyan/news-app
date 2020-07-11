@@ -29,7 +29,7 @@ class News extends Component {
     };
 
     fetchDataSearch = (id, prevId, searchValue) => {
-        let url = 'http://newsapi.org/v2/everything?';
+        let url = 'https://newsapi.org/v2/everything?';
         if (!id) {
             url += `q=-bitcoin`;
         } else {
