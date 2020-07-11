@@ -17,18 +17,17 @@ class Menu extends Component {
     componentDidMount() {
         this.loadData()
     }
-
     handleChange = (searchValue) => {
         this.setState({searchValue})
     };
     handleMenuItemClick = () => {
         this.setState({
             searchValue: '',
-            showMobileMenu: false
+            showMobileMenu: !this.state.showMobileMenu
         })
     };
 
-    handleMenuTogglerClick = (e) => {
+    handleMenuToggleClick = (e) => {
         e.preventDefault();
         this.setState({showMobileMenu: !this.state.showMobileMenu});
     };
@@ -57,7 +56,7 @@ class Menu extends Component {
         return (
             <>
                 <button
-                    onClick={this.handleMenuTogglerClick}
+                    onClick={this.handleMenuToggleClick}
                     className="navbar-toggler"
                     type="button"
                     data-toggle="collapse"
@@ -102,7 +101,9 @@ class Menu extends Component {
                     <Search
                         searchValue={this.state.searchValue}
                         handleChange={this.handleChange}
-                        to={{ pathname: `/search/${this.state.searchValue}`,
+                        clickSearchBtn={this.handleMenuItemClick}
+                        to={{
+                            pathname: `/search/${this.state.searchValue}`,
                             state: {search: this.state.searchValue}
                         }}
                     />

@@ -132,3 +132,22 @@ footer {
     font-size: 25px;
     color: #163abe;
 }
+
+.topnav {
+    overflow: hidden;
+}
+
+.topnav-right {
+    float: right;
+}
+
+.topnav span {
+    font-size: 29px;
+    line-height: 1;
+}
+
+@media screen and (max-width: 600px) {
+    .topnav-right {
+        float: left;
+    }
+}

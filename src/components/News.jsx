@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {constants} from './constant';
 import {Link} from "react-router-dom";
 import Search from "./header/Search";
-import HandleError from "./error/HandleError";
+import {HandleError} from "./error/HandleError";
 import {Loader} from "./Loading";
 import {NoResult} from "./error/NoResult";
 
@@ -10,24 +10,17 @@ class News extends Component {
     state = {
         articleList: [],
         loading: false,
-        searchValue: '',
+        searchValue: null,
         error: false
     };
 
     componentDidMount() {
-        this.props.location.state ?
-            this.searchUrl() : this.fetchDataByCategory(this.props.match.params.id);
+        this.fetchDataSearch(this.props.match.params.id, null, this.state.searchValue);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.match.params.id !== this.props.match.params.id) {
-            if (this.state.searchValue) {
-                this.fetchDataByCategory(prevProps.match.params.id)
-            } else if (this.props.location.state) {
-                this.searchUrl()
-            } else {
-                this.fetchDataByCategory(this.props.match.params.id)
-            }
+        if (prevProps !== this.props) {
+            this.fetchDataSearch(this.props.match.params.id, prevProps.match.params.id, this.state.searchValue)
         }
     }
 
@@ -35,35 +28,23 @@ class News extends Component {
         this.setState({searchValue})
     };
 
-    searchUrl = () => {
-        const searchValue = this.props.location.state.search;
-        const url = `https://newsapi.org/v2/top-headlines?q=${searchValue}&apiKey=${constants.API_KEY}`;
-        this.fetchDataBySearch(url);
-    };
-
-    fetchDataBySearch = (url) => {
-        fetch(url).then(response => {
-            return response.json().then(data => {
-                this.setState({articleList: data.articles})
-            })
-        }).catch(error => {
-            this.setState({error: true})
-        }).finally(() => {
-            this.setState({error: false})
-        });
-    };
-
-    fetchDataByCategory = (id) => {
-        let url = 'http://newsapi.org/v2/';
-        if (this.state.searchValue) {
-            const searchValue = this.state.searchValue.split(' ').join('%20')
-            url += `top-headlines?sources=${id}&q=${searchValue}`;
-        } else if (id) {
-            url += `top-headlines?sources=${id}`;
+    fetchDataSearch = (id, prevId, searchValue) => {
+        let url = 'http://newsapi.org/v2/everything?';
+        if (!id) {
+            url += `q=-bitcoin`;
         } else {
-            url += 'everything?q=bitcoin'
+            if (searchValue) {
+                url += `sources=${prevId}&qInTitle=${this.props.location.state.search}`;
+            } else {
+                if (this.props.location.state) {
+                    url += `qInTitle=${id}`;
+                } else {
+                    url += `sources=${id}`;
+                }
+            }
         }
         url += `&apiKey=${constants.API_KEY}`;
+
         this.setState({loading: true, articleList: []});
 
         fetch(url)
@@ -95,16 +76,22 @@ class News extends Component {
                     return (
                         <>
                             {checkIsCategoryPage[1] === 'category' ?
-                                <div className='mb-4'>
-                                    <Search
-                                        searchValue={this.state.searchValue}
-                                        handleChange={this.handleChange}
-                                        to={{
-                                            pathname: `/category/search/${this.state.searchValue}`,
-                                            state: {search: this.state.searchValue}
-                                        }}
-                                    />
+                                <div className="topnav mb-3">
+                                    <span>{this.state.articleList[0].source.name}</span>
+                                    <div className="topnav-right">
+                                        <Search
+                                            searchValue={this.state.searchValue}
+                                            handleChange={this.handleChange}
+                                            clickSearchBtn={() => {
+                                            }}
+                                            to={{
+                                                pathname: `/category/search/${this.state.searchValue}`,
+                                                state: {search: this.state.searchValue}
+                                            }}
+                                        />
+                                    </div>
                                 </div>
+
                                 : ''}
                             <div className="card-columns">
 

@@ -2,9 +2,10 @@ import React, {Component} from 'react'
 import Header from "./header/Header";
 import '../style.css';
 import News from "./News";
-import { Route, Switch } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import Article from "./Article";
-import NotFoundPage from "./error/NotFoundPage";
+import {NotFoundPage} from "./error/NotFoundPage";
+import {Footer} from "./Footer";
 
 class Home extends Component {
     render() {
@@ -21,12 +22,7 @@ class Home extends Component {
                         <Route path="*" component={NotFoundPage}/>
                     </Switch>
                 </div>
-                <footer className="page-footer font-small blue">
-                    <div className="footer-copyright text-center py-3">
-                        © 2020 Copyright:
-                        <a href="https://www.news24.com/"> news24.com</a>
-                    </div>
-                </footer>
+                <Footer/>
             </>
         )
     }

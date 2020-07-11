@@ -21,7 +21,7 @@ class ContactUs extends Component {
         const validEmailRegex =
             RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
-        switch(name) {
+        switch (name) {
             case 'name':
                 errors.name =
                     !(value.length > 2);

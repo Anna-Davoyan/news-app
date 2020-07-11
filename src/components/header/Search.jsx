@@ -1,12 +1,16 @@
-import React,{Component} from "react";
+import React, {Component} from "react";
 import {Link} from "react-router-dom";
 
-class Search extends Component{
-    handleChange = (e)=>{
+class Search extends Component {
+    handleChange = (e) => {
         this.props.handleChange(e.target.value);
     };
+    onClickSearch = () => {
+        this.props.clickSearchBtn()
+    };
+
     render() {
-        return(
+        return (
             <form className="form-inline my-2 my-lg-0">
                 <input
                     className="form-control mr-sm-2"
@@ -18,6 +22,7 @@ class Search extends Component{
                 />
                 <Link
                     className="btn btn-outline-success my-2 my-sm-0"
+                    onClick={this.onClickSearch}
                     to={this.props.to}
                 >
                     Search
@@ -26,4 +31,5 @@ class Search extends Component{
         )
     }
 }
+
 export default Search;
