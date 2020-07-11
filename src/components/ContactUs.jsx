@@ -48,8 +48,7 @@ class ContactUs extends Component {
         event.preventDefault();
         const error = this.state.errors;
         const state = this.state;
-        if (state.name !== '' && state.email !== '' && state.message !== '') {
-            if ((!error.name && !error.email && !error.message)) {
+        if ((!state.name && state.email !== '' && state.message !== '') && (!error.name && !error.email && !error.message) ) {
                 setTimeout(() => {
                     this.setState({
                         thankYouMessage: false
@@ -73,7 +72,6 @@ class ContactUs extends Component {
                 this.setState({
                     loading: true
                 })
-            }
         } else {
             this.setState({
                 errors: {

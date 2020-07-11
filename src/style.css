@@ -17,6 +17,7 @@ body {
 
 .logo {
     width: 200px;
+    cursor: pointer;
 }
 
 .navbar-light .navbar-nav .active > .nav-link,

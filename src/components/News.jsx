@@ -10,49 +10,51 @@ class News extends Component {
     state = {
         articleList: [],
         loading: false,
-        searchValue: null,
         error: false
     };
 
     componentDidMount() {
-        this.fetchDataSearch(this.props.match.params.id, null, this.state.searchValue);
+        this.fetchDataSearch();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps !== this.props) {
-            this.fetchDataSearch(this.props.match.params.id, prevProps.match.params.id, this.state.searchValue)
+            this.fetchDataSearch()
         }
     }
 
-    handleChange = (searchValue) => {
-        this.setState({searchValue})
-    };
+    fetchDataSearch = () => {
+        const {id, query} = this.props.match.params;
 
-    fetchDataSearch = (id, prevId, searchValue) => {
         let url = 'https://newsapi.org/v2/everything?';
+
+        const qParams = {apiKey: constants.API_KEY};
+
         if (!id) {
-            url += `q=-bitcoin`;
+            qParams['q'] = '-bitcoin';
         } else {
-            if (searchValue) {
-                url += `sources=${prevId}&qInTitle=${this.props.location.state.search}`;
-            } else {
-                if (this.props.location.state) {
-                    url += `qInTitle=${id}`;
-                } else {
-                    url += `sources=${id}`;
-                }
-            }
+            qParams['sources'] = id;
         }
-        url += `&apiKey=${constants.API_KEY}`;
+
+        if (query) {
+            qParams['q'] = query;
+        }
+
+
+        const queryString = Object.keys(qParams)
+            .map(k => k + '=' + encodeURIComponent(qParams[k]))
+            .join('&');
+
+        url += queryString;
 
         this.setState({loading: true, articleList: []});
 
         fetch(url)
             .then(response => {
                 return response.json().then(data => {
-                    if(data.status==='error'){
+                    if (data.status === 'error') {
                         this.setState({error: true})
-                    }else {
+                    } else {
                         this.setState({articleList: data.articles, error: false})
                     }
                 })
@@ -61,68 +63,58 @@ class News extends Component {
                 this.setState({error: true})
             })
             .finally(() => {
-                this.setState({loading: false, searchValue: ''})
+                this.setState({loading: false})
             });
     };
 
 
     render() {
-        const checkIsCategoryPage = window.location.pathname.split('/');
         if (this.state.error) {
             return <HandleError/>
-        } else {
-            if (this.state.loading) {
-                return <Loader/>
-            } else {
-                if (this.state.articleList.length===0) {
-                        return <NoResult/>
-                } else {
-                    return (
-                        <>
-                            {checkIsCategoryPage[1] === 'category' ?
-                                <div className="topnav mb-3">
-                                    <span>{this.state.articleList[0].source.name}</span>
-                                    <div className="topnav-right">
-                                        <Search
-                                            searchValue={this.state.searchValue}
-                                            handleChange={this.handleChange}
-                                            clickSearchBtn={() => {
-                                            }}
-                                            to={{
-                                                pathname: `/category/search/${this.state.searchValue}`,
-                                                state: {search: this.state.searchValue}
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                                : ''}
-                            <div className="card-columns">
-
-                                {this.state.articleList.map((element) => (
-                                    <Link
-                                        key={element.url}
-                                        to={{
-                                            pathname: `/category/article/${element.source.name}`,
-                                            state: {article: element}
-                                        }}
-                                    >
-                                        <div className="card">
-                                            <img className="card-img-top" style={{width: '100%'}}
-                                                 src={element.urlToImage}/>
-                                            <div className="card-body">
-                                                <h6 className="card-title">{element.title}</h6>
-                                                <p className="btn btn-color">MORE</p>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </>
-                    )
-                }
-            }
         }
+
+        if (this.state.loading) {
+            return <Loader/>
+        }
+
+        if (this.state.articleList.length === 0) {
+            return <NoResult/>
+        }
+
+        return (
+            <>
+                {this.props.match.params.id && (<div className="topnav mb-3">
+                    <span>{this.state.articleList[0].source.name}</span>
+                    <div className="topnav-right">
+                        <Search
+                            categoryId={this.props.match.params.id}
+                        />
+                    </div>
+                </div>)
+                }
+
+                <div className="card-columns">
+                    {this.state.articleList.map((article) => (
+                        <Link
+                            key={article.url}
+                            to={{
+                                pathname: `/article/${article.title}`,
+                                state: {article}
+                            }}
+                        >
+                            <div className="card">
+                                <img className="card-img-top" style={{width: '100%'}}
+                                     src={article.urlToImage}/>
+                                <div className="card-body">
+                                    <h6 className="card-title">{article.title}</h6>
+                                    <p className="btn btn-color">MORE</p>
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </>
+        )
     }
 
 }

@@ -15,10 +15,10 @@ class Home extends Component {
                 <div className='wrapper'>
                     <Switch>
                         <Route exact path="/" component={News}/>
+                        <Route exact path="/search/:query" component={News}/>
                         <Route exact path="/category/:id" component={News}/>
-                        <Route exact path="/category/article/:name" component={Article}/>
-                        <Route exact path="/search/:id" component={News}/>
-                        <Route exact path="/category/search/:id" component={News}/>
+                        <Route exact path="/category/:id/search/:query" component={News}/>
+                        <Route exact path="/article/:name" component={Article}/>
                         <Route path="*" component={NotFoundPage}/>
                     </Switch>
                 </div>
