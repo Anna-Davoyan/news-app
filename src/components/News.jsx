@@ -50,14 +50,15 @@ class News extends Component {
         fetch(url)
             .then(response => {
                 return response.json().then(data => {
-                    this.setState({articleList: data.articles})
+                    console.log(data)
+                    this.setState({articleList: data.articles,error: false})
                 })
             })
             .catch(error => {
                 this.setState({error: true})
             })
             .finally(() => {
-                this.setState({loading: false, searchValue: '', error: false})
+                this.setState({loading: false, searchValue: ''})
             });
     };
 
@@ -71,7 +72,7 @@ class News extends Component {
                 return <Loader/>
             } else {
                 if (this.state.articleList.length === 0) {
-                    return <NoResult/>
+                        return <NoResult/>
                 } else {
                     return (
                         <>
