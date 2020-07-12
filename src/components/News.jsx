@@ -107,7 +107,7 @@ class News extends Component {
                                      src={article.urlToImage}/>
                                 <div className="card-body">
                                     <h6 className="card-title">{article.title}</h6>
-                                    <p className="btn btn-color">MORE</p>
+                                    <p className="btn btn-more float-right">MORE</p>
                                 </div>
                             </div>
                         </Link>

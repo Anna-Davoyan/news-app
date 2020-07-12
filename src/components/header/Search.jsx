@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
+import { withRouter } from 'react-router';
 
 class Search extends Component {
     state = {
@@ -9,17 +9,20 @@ class Search extends Component {
     handleChange = (e) => {
         this.setState({searchValue: e.target.value})
     };
-
-    render() {
+    handleSubmit = (e)=>{
+        e.preventDefault();
         let path;
         if (this.props.categoryId) {
             path = `/category/${this.props.categoryId}/search/${this.state.searchValue}`
         } else {
             path = `/search/${this.state.searchValue}`
         }
+        this.props.history.push(path);
+    };
 
+    render() {
         return (
-            <form className="form-inline my-2 my-lg-0">
+            <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSubmit}>
                 <input
                     className="form-control mr-sm-2"
                     type="search"
@@ -28,15 +31,14 @@ class Search extends Component {
                     value={this.state.searchValue}
                     onChange={this.handleChange}
                 />
-                <Link
+                <button
                     className="btn btn-outline-success my-2 my-sm-0"
-                    to={{pathname: path}}
                 >
                     Search
-                </Link>
+                </button>
             </form>
         )
     }
 }
 
-export default Search;
+export default withRouter(Search);

@@ -46,15 +46,15 @@ body {
     border-color: #163abe;
 }
 
-.btn-color {
-    background-color: #163abe;
-    color: #fff
-}
-
-.btn-color:hover {
+.btn-more {
     color: #163abe;
     border-color: #163abe;
     background-color: transparent;
+}
+
+.btn-more:hover {
+    background-color: #163abe;
+    color: #fff;
 }
 
 .card-title, .card-text {
