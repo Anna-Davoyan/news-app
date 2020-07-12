@@ -24,7 +24,7 @@ class Search extends Component {
         return (
             <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSubmit}>
                 <input
-                    className="form-control mr-sm-2"
+                    className="form-control sm-2 search-input"
                     type="search"
                     aria-label="Search"
                     placeholder="Search"
