@@ -150,6 +150,7 @@ footer {
 }
 .search-input{
     border-radius: 5px 0px 0px 5px;
+    width: 71%;
 }
 .form-control:focus{
     box-shadow: 0px 0px 0px 0px;
